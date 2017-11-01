@@ -1,9 +1,16 @@
-let tatooine;
+const API = 'https://swapi.co/api/planets/';
 
-async function getPlanet(number = '') {
-  const response = await fetch(`https://swapi.co/api/planets/${number}`);
+let planets = [];
+
+async function getPlanets(planetApi = API) {
+  const response = await fetch(planetApi);
   const data = await response.json();
-  console.log(data);
+  planets = [...planets, ...data.results];
+  if (data.next) {
+    getPlanets(data.next);
+  }
 }
 
-getPlanet();
+getPlanets();
+
+console.log(planets);
